@@ -4,10 +4,8 @@ using RockScissorsPaper.Utils.Generators;
 
 class Program
 {
-    static void Main(/*string[] args*/)
+    static void Main(string[] args)
     {
-        string[] args = ["rock", "scissors", "paper", "willow"];
-
         (bool areArgsValid, List<string> errors) = GameMovesValidator.ValidateMoves(args);
         if (!areArgsValid)
         {
