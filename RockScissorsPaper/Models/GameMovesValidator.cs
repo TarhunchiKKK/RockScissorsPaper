@@ -2,28 +2,18 @@
 {
     public class GameMovesValidator
     {
-        private static bool CheckArrayLength(string[] strings)
+        private static bool CheckArrayLength(string[] moves)
         {
-            return strings.Length >= 3 ? true : false;
+            return moves.Length >= 3 ? true : false;
         }
 
-        private static bool CheckForDuplicates(string[] strings)
+        private static bool CheckForDuplicates(string[] moves)
         {
-            for (int i = 0; i < strings.Length; i++)
-            {
-                for (int j = i + 1; j < strings.Length; j++)
-                {
-                    if (strings[i] == strings[j])
-                    {
-                        return false;
-                    }
-                }
-
-            }
-            return true;
+            HashSet<string> movesSet = new HashSet<string>(moves);
+            return movesSet.Count == moves.Length;
         }
 
-        public static (bool, List<string>) Validate(string[] strings)
+        public static (bool, List<string>) ValidateMoves(string[] strings)
         {
             bool isValid = true;
             List<string> errors = new();

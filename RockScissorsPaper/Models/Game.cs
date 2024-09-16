@@ -10,15 +10,12 @@ namespace RockScissorsPaper.Models
 
         GameWinnerReesolver WinnerResolver { init; get; } = null!;
 
-        GameRules GameRules { init; get; } = null!;
-
         GenerateHMAC HMACGenerator { init; get; } = null!;
 
         public Game(string[] moves, GenerateHMAC generateHMAC)
         {
             this.Moves = new List<string>(moves);
             this.WinnerResolver = new GameWinnerReesolver(moves);
-            this.GameRules = new GameRules(moves, this.WinnerResolver.Compare);
             this.HMACGenerator = generateHMAC;
         }
 
@@ -51,7 +48,7 @@ namespace RockScissorsPaper.Models
 
                         if (userMove == "help")
                         {
-                            this.GameRules.PrintRules();
+                            PrintRules();
                         }
                         else
                         {
@@ -67,6 +64,32 @@ namespace RockScissorsPaper.Models
             Random random = new Random();
             int index = random.Next(0, this.Moves.Count);
             return this.Moves[index];
+        }
+
+        private void PrintRules()
+        {
+            List<List<string>> table = new List<List<string>>();
+
+            // headers
+            List<string> headers = new List<string>();
+            headers.Add("v PC\\User >");
+            headers.AddRange(this.Moves);
+            table.Add(headers);
+
+            // other
+            for (int i = 0; i < this.Moves.Count; i++)
+            {
+                List<string> row = new List<string>();
+                row.Add(this.Moves[i]);
+                for (int j = 0; j < this.Moves.Count; j++)
+                {
+                    GameResult compareResult = this.WinnerResolver.Compare(this.Moves[i], this.Moves[j]);
+                    row.Add(compareResult.ToString());
+                }
+                table.Add(row);
+            }
+
+            TablePrinter.PrintTable(table);
         }
 
         public void Start(byte[] hmacKey)
@@ -96,7 +119,6 @@ namespace RockScissorsPaper.Models
                     Console.WriteLine("Draw");
                     break;
             }
-            //string r = hmacKey.ToString()!;
             Console.WriteLine($"HMAC key: {StringConverter.FromHMAC(hmacKey)}");
         }
     }

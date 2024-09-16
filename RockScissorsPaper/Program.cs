@@ -8,7 +8,7 @@ class Program
     {
         string[] args = ["rock", "scissors", "paper", "willow"];
 
-        (bool areArgsValid, List<string> errors) = GameMovesValidator.Validate(args);
+        (bool areArgsValid, List<string> errors) = GameMovesValidator.ValidateMoves(args);
         if (!areArgsValid)
         {
             errors.ForEach(Console.WriteLine);
